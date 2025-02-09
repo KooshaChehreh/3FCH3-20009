@@ -37,3 +37,9 @@ class OrderSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+class BookSerializer(serializers.Serializer):
+    number_of_guests = serializers.IntegerField()
+
+class CancelSerializer(serializers.Serializer):
+    order_id = serializers.IntegerField()

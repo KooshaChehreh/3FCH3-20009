@@ -51,10 +51,18 @@ class TableDoesNotExist(APIException):
         "message": "میز مورد نظر وجود ندارد.",
     }
 
-class TableReserved(APIException):
+class TableNotReservable(APIException):
     status_code = 400
-    default_code = "table_reserved"
+    default_code = "table_not_reservable"
     default_detail = {
         "code": default_code,
-        "message": "این میز رزرو شده است.",
+        "message": "این میز قابل رزرو شدن نیست.",
+    }
+
+class OrderNotFound(APIException):
+    status_code = 400
+    default_code = "table_not_reservable"
+    default_detail = {
+        "code": default_code,
+        "message": "سفارش یافت نشد.",
     }
