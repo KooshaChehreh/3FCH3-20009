@@ -5,7 +5,7 @@ from rest_framework.decorators import (
 )
 from users.serializer import UsersSerializer, LoginSerializer
 from exceptions import *
-from jwt_auth import generate_access_token
+from users.jwt_auth import generate_access_token
 from rest_framework.response import Response
 from rest_framework import status
 from users.models import User
