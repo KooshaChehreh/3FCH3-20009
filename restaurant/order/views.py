@@ -56,10 +56,21 @@ class TableViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def cancel(self, request, pk=None):
+        """
+            I have considered that both user and admin can use the api. If not, a permission should be implemented
+        """
         serializer = CancelSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         order_id = serializer.validated_data.get("order_id")
         try:
             order = Order.objects.get(id=order_id)
+            table = Table.objects.get(id=order.table_id)
         except Order.DoesNotExist:
             raise OrderNotFound
+        except Table.DoesNotExist:
+            raise TableDoesNotExist
+        order.order_state = Order.ORDER_CANCELED
+        table.table_state = Table.TABLE_AVAILABLE
+        order.save()
+        table.save()
+        return Response(status=status.HTTP_200_OK)
