@@ -1,6 +1,6 @@
 import re
 from django.core.exceptions import ValidationError
-
+from django.conf import settings
 
 def phone_validator(phone: str) -> str:
     if not re.match(r"^09\d{9}$", phone):
@@ -9,6 +9,6 @@ def phone_validator(phone: str) -> str:
 
 
 def seats_number_validator(seats_number: int) -> int:
-    if seats_number < 4 or seats_number > 10:
-        raise ValidationError("Seats number must br between 4 and 10")
+    if seats_number < settings.TABLE_MIN_SEATS or seats_number > settings.TABLE_MAX_SEATS:
+        raise ValidationError(f"Seats number must br between {settings.TABLE_MIN_SEATS} and {settings.TABLE_MAX_SEATS}")
     return seats_number

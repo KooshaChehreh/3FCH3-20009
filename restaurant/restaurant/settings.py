@@ -104,7 +104,7 @@ if DEBUG:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-    
+
 else:
     DATABASES = {
     'default': {
@@ -177,3 +177,10 @@ JWT_EXPIRATION_SECS = 20 * 60
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", None)
 JWT_PUBLIC_KEY = os.environ.get("JWT_PUBLIC_KEY", None)
 JWT_PRIVATE_KEY = os.environ.get("JWT_PRIVATE,KEY", None)
+
+# Table Settings
+
+TABLE_MAX_COUNTS = 10
+TABLE_MIN_SEATS = 4
+TABLE_MAX_SEATS = 4
+TABLE_SEAT_COST = 1000

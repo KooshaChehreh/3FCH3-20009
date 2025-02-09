@@ -42,3 +42,19 @@ class UserDoesNotExist(APIException):
         "code": default_code,
         "message": "کاربر وجود ندارد.",
     }
+
+class TableDoesNotExist(APIException):
+    status_code = 400
+    default_code = "table_does_not_exist"
+    default_detail = {
+        "code": default_code,
+        "message": "میز مورد نظر وجود ندارد.",
+    }
+
+class TableReserved(APIException):
+    status_code = 400
+    default_code = "table_reserved"
+    default_detail = {
+        "code": default_code,
+        "message": "این میز رزرو شده است.",
+    }
