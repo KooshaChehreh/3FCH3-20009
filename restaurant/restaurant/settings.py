@@ -96,7 +96,7 @@ PASSWORD_HASHERS = [
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-
+DEBUG = os.environ.get("DEBUG", True)
 if DEBUG:
     DATABASES = {
         "default": {
@@ -104,6 +104,7 @@ if DEBUG:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+    
 else:
     DATABASES = {
     'default': {
