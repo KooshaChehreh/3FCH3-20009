@@ -10,5 +10,5 @@ def phone_validator(phone: str) -> str:
 
 def seats_number_validator(seats_number: int) -> int:
     if seats_number < settings.TABLE_MIN_SEATS or seats_number > settings.TABLE_MAX_SEATS:
-        raise ValidationError(f"Seats number must br between {settings.TABLE_MIN_SEATS} and {settings.TABLE_MAX_SEATS}")
+        raise ValidationError(f"Seats number must be between {settings.TABLE_MIN_SEATS} and {settings.TABLE_MAX_SEATS}")
     return seats_number

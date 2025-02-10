@@ -93,6 +93,10 @@ class Order(models.Model):
     
     @staticmethod
     def adjust_odd_guests(number_of_seat):
+        if number_of_seat < 4:
+            number_of_seat = 4
+            return number_of_seat
+        
         if number_of_seat % 2 != 0:
             return number_of_seat + 1
         else:

@@ -26,7 +26,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "id",
             "user_id",
             "table_id",
-            "number_of_guests",
+            "number_of_seat",
             "order_price",
             "order_state",
             "created_at",

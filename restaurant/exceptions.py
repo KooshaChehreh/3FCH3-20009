@@ -66,3 +66,11 @@ class OrderNotFound(APIException):
         "code": default_code,
         "message": "سفارش یافت نشد.",
     }
+
+class ExceededTableNumbers(APIException):
+    status_code = 400
+    default_code = "number_of_tables_exceeded"
+    default_detail = {
+        "code": default_code,
+        "message": "تعداد میز بیش از حد مجاز است.",
+    }
