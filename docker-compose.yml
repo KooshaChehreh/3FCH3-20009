@@ -6,7 +6,7 @@ services:
     container_name: postgres-django-restaurant
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ''
+      POSTGRES_PASSWORD: pars1234
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
@@ -22,7 +22,7 @@ services:
       DB_PORT: 5432
       DB_NAME: postgres
       DB_USER: postgres
-      DB_PASSWORD: ''
+      DB_PASSWORD: pars1234
     ports:
       - "8000:8000"
     depends_on:
