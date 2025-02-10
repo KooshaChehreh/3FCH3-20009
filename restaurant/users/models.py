@@ -10,7 +10,6 @@ from rest_framework.exceptions import AuthenticationFailed
 class User(models.Model):
     username = models.CharField(
         max_length=64,
-        unique=True,
         verbose_name="نام کاربری",
     )
     phone = models.CharField(
@@ -63,7 +62,7 @@ class User(models.Model):
             payload = jwt.decode(
                 jwt=access_token,
                 key=settings.JWT_PUBLIC_KEY,
-                algorithms=["RS256"],
+                algorithms=["HS256"],
             )
 
         except (jwt.exceptions.DecodeError, jwt.exceptions.DecodeError):

@@ -13,6 +13,7 @@ def generate_access_token(user: User) -> str:
         "id": user.id,
         "phone": user.phone,
     }
-    return jwt.encode(base_payload, settings.JWT_PRIVATE_KEY, algorithm="RS256")
+
+    return jwt.encode(base_payload, settings.JWT_PRIVATE_KEY, algorithm="HS256")
 
 

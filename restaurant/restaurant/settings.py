@@ -16,14 +16,11 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env_file = BASE_DIR / '.env'
+import environ
 
-if env_file.exists():
-    with open(env_file) as f:
-        for line in f:
-            if line.strip() and not line.startswith('#'):
-                key, value = line.strip().split('=', 1)
-                os.environ[key] = value.strip()
+env = environ.Env()
+environ.Env.read_env(BASE_DIR.parent / ".env")
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -174,12 +171,12 @@ REST_FRAMEWORK = {
 
 # JWT Settings
 JWT_EXPIRATION_SECS = 20 * 60
-JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", None)
-JWT_PUBLIC_KEY = os.environ.get("JWT_PUBLIC_KEY", None)
-JWT_PRIVATE_KEY = os.environ.get("JWT_PRIVATE,KEY", None)
+JWT_SECRET_KEY = env("JWT_SECRET_KEY")
+JWT_PUBLIC_KEY = env("JWT_PUBLIC_KEY")
+JWT_PRIVATE_KEY = env("JWT_PRIVATE_KEY")
+
 
 # Table Settings
-
 TABLE_MAX_COUNTS = 10
 TABLE_MIN_SEATS = 4
 TABLE_MAX_SEATS = 4
