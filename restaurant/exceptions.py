@@ -74,3 +74,11 @@ class ExceededTableNumbers(APIException):
         "code": default_code,
         "message": "تعداد میز بیش از حد مجاز است.",
     }
+
+class TableReachedCapacity(APIException):
+    status_code = 400
+    default_code = "table_reached_capacity"
+    default_detail = {
+        "code": default_code,
+        "message": "تعداد نفرات از تعداد صندلی های میز بیشتر است.",
+    }

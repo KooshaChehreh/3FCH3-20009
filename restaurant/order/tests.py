@@ -65,79 +65,79 @@ class TableViewSetTestCase(APITestCase):
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(Order.objects.filter().first().order_price, (4-1) * settings.TABLE_SEAT_COST)
 
-    # def test_book_table_not_available(self):
-    #     self.table.table_state = Table.TABLE_RESERVED
-    #     self.table.save()
+    def test_book_table_not_available(self):
+        table = baker.make(Table, table_state= Table.TABLE_RESERVED)
+        data = {
+            "number_of_guests": 3
+        }
+        url=reverse("tables-book", kwargs={"pk":table.id})
+        response = self.user_authenticated_client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], TableNotReservable.default_code)
 
-    #     data = {
-    #         "number_of_guests": 3
-    #     }
-    #     response = self.client.post(f'/api/tables/{self.table.id}/book/', data)
 
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_book_table_exceed_capacity(self):
+        table = baker.make(Table, seats_number=4)
+        data = {
+            "number_of_guests": 5 
+        }
+        url=reverse("tables-book", kwargs={"pk":table.id})
+        response = self.user_authenticated_client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], TableReachedCapacity.default_code)
+        
 
-    # def test_book_table_exceed_capacity(self):
-    #     data = {
-    #         "number_of_guests": 5  # Exceeds the table's seats_number (4)
-    #     }
-    #     response = self.client.post(f'/api/tables/{self.table.id}/book/', data)
+    def test_book_table_no_guests_provided(self):
+        table = baker.make(Table, seats_number=4)
+        data = {}
+        url=reverse("tables-book", kwargs={"pk":table.id})
+        response = self.user_authenticated_client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
 
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    #     self.assertEqual(
-    #         response.data['message'],
-    #         "Number of guests exceeds table capacity (4)."
-    #     )
+    def test_cancel_order_success(self):
+        table = baker.make(Table, seats_number=4)
+        order = Order.objects.create(
+            user_id=1,
+            table_id=table.id,
+            number_of_seat=3,
+            order_price=100,
+            order_state=Order.ORDER_DONE
+        )
+        table.table_state = Table.TABLE_RESERVED
+        table.save()
 
-    # def test_book_table_no_guests_provided(self):
-    #     data = {}  # Missing `number_of_guests`
-    #     response = self.client.post(f'/api/tables/{self.table.id}/book/', data)
+        data = {
+            "order_id": order.id
+        }
+        url=reverse("tables-cancel")
+        response = self.user_authenticated_client.post(url, data)
 
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    #     self.assertEqual(
-    #         response.data['message'],
-    #         "Number of guests is required."
-    #     )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Order.objects.get(id=order.id).order_state, Order.ORDER_CANCELED)
+        self.assertEqual(Table.objects.get(id=table.id).table_state, Table.TABLE_AVAILABLE)
 
-    # def test_cancel_order_success(self):
-    #     order = Order.objects.create(
-    #         user_id=1,
-    #         table_id=self.table.id,
-    #         number_of_guests=3,
-    #         order_price=100,
-    #         order_state=Order.ORDER_ACTIVE
-    #     )
-    #     self.table.table_state = Table.TABLE_RESERVED
-    #     self.table.save()
+    def test_cancel_order_not_found(self):
+        data = {
+            "order_id": 999 
+        }
+        url=reverse("tables-cancel")
+        response = self.user_authenticated_client.post(url, data)
+        self.assertEqual(response.data["code"], OrderNotFound.default_code)
 
-    #     data = {
-    #         "order_id": order.id
-    #     }
-    #     response = self.client.post('/api/tables/cancel/', data)
+    def test_cancel_table_not_found(self):
+        order = Order.objects.create(
+            user_id=1,
+            table_id=999,
+            number_of_seat=3,
+            order_price=100,
+            order_state=Order.ORDER_DONE
+        )
 
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(order.refresh_from_db().order_state, Order.ORDER_CANCELED)
-    #     self.assertEqual(self.table.refresh_from_db().table_state, Table.TABLE_AVAILABLE)
+        data = {
+            "order_id": order.id
+        }
+        url=reverse("tables-cancel")
+        response = self.user_authenticated_client.post(url, data)
+        self.assertEqual(response.data["code"], TableDoesNotExist.default_code)
 
-    # def test_cancel_order_not_found(self):
-    #     data = {
-    #         "order_id": 999  # Non-existent order ID
-    #     }
-    #     response = self.client.post('/api/tables/cancel/', data)
-
-    #     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    # def test_cancel_table_not_found(self):
-    #     order = Order.objects.create(
-    #         user_id=1,
-    #         table_id=999,  # Non-existent table ID
-    #         number_of_guests=3,
-    #         order_price=100,
-    #         order_state=Order.ORDER_ACTIVE
-    #     )
-
-    #     data = {
-    #         "order_id": order.id
-    #     }
-    #     response = self.client.post('/api/tables/cancel/', data)
-
-    #     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

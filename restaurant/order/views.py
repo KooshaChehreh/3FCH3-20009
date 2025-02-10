@@ -27,18 +27,9 @@ class TableViewSet(viewsets.ModelViewSet):
             
         if table.table_state != Table.TABLE_AVAILABLE:
             raise TableNotReservable
-        
-        if number_of_guests is None:
-            return Response(
-                {"message": "Number of guests is required."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
 
         if number_of_guests > table.seats_number:
-            return Response(
-                {"message": f"Number of guests exceeds table capacity ({table.seats_number})."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            raise TableReachedCapacity
         
         number_of_seat=Order.adjust_odd_guests(number_of_guests)
         order = Order.objects.create(
