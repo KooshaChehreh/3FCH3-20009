@@ -1,7 +1,7 @@
-# 3Restaurant Django Application
+# Restaurant Django Application
 
 
-Prerequisites
+# Prerequisites
 
 Before running this project, ensure you have the following installed:
 
@@ -25,7 +25,7 @@ consider that .env file should not be on the git repository. However, I have pre
 
 
 
-Running the Project
+# Running the Project
 
 1. Run Locally
 
@@ -73,7 +73,7 @@ Build and run the containers
 sudo docker-compose up --build
 
 
-Running Tests
+# Running Tests
 
 To run the tests for the project:
 
@@ -83,7 +83,7 @@ Activate your virtual environment (if running locally) or open a shell in the ap
 python manage.py test
 
 
-URLs
+# URLs
 
 Admin Panel: http://localhost:8000/admin
 
