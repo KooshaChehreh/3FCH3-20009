@@ -61,10 +61,10 @@ class User(models.Model):
             access_token = auth_header.split(" ")[1]
             payload = jwt.decode(
                 jwt=access_token,
-                key=settings.JWT_PUBLIC_KEY,
+                key=settings.JWT_SECRET_KEY,
                 algorithms=["HS256"],
             )
-
+            print(payload)
         except (jwt.exceptions.DecodeError, jwt.exceptions.DecodeError):
             raise AuthenticationFailed(
                 detail={"message": "Invalid token", "code": "invalid_token"}
