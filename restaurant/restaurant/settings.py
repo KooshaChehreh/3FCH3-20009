@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     "users",
     "order",
+    "django_celery_results",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -181,3 +183,10 @@ TABLE_MAX_COUNTS = 10
 TABLE_MIN_SEATS = 4
 TABLE_MAX_SEATS = 10
 TABLE_SEAT_COST = 1000
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://redis:6380/0'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_SERIALIZER = 'json'
