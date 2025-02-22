@@ -63,3 +63,9 @@ class TableViewSet(viewsets.ModelViewSet):
         order.save()
         table.save()
         return Response(status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'])
+    def order(self, request, pk=None):
+        orders = Order.objects.all() 
+        serialized_data = OrderSerializer(orders, many=True).data
+        return Response(serialized_data, status=status.HTTP_200_OK)
